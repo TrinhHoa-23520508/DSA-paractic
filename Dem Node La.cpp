@@ -1,18 +1,18 @@
-#include <iostream>
+#include<iostream>
 using namespace std;
-
-struct TNODE {
-	int key;
-	TNODE* pLeft;
-	TNODE* pRight;
+struct TNODE
+{
+    int key;
+    TNODE* pLeft;
+    TNODE* pRight;
 };
 typedef TNODE* TREE;
 TNODE* CreateTNode(int x)
 {
-    TNODE *p = new TNODE;
-    p -> key = x;
-    p -> pLeft = NULL;
-    p -> pRight = NULL;
+    TNODE* p = new TNODE;
+    p->key = x;
+    p->pLeft = NULL;
+    p->pRight = NULL;
     return p;
 }
 int Insert(TREE &T, int x)
@@ -20,11 +20,8 @@ int Insert(TREE &T, int x)
     if(T)
     {
         if(T->key==x) return 0;
-        if(T->key<x)
-        {
-            return Insert(T->pRight, x);
-        }
-        return Insert(T->pLeft, x);
+        if(T->key<x) return Insert(T->pRight, x);
+        else return Insert(T->pLeft, x);
     }
     T = CreateTNode(x);
     return 1;
@@ -35,33 +32,25 @@ void CreateTree(TREE &T)
     while(1)
     {
         cin>>x;
-        if(x==-1) return;
+        if(x==-1) break;
         else
         {
             Insert(T, x);
         }
     }
 }
-int CountLeaf(TREE T)
+int findLongestPathLength(TNODE* root) {
+    if (!root) return 0;
+    int leftDepth = findLongestPathLength(root->pLeft);
+    int rightDepth = findLongestPathLength(root->pRight);
+    return max(leftDepth, rightDepth) + 1;
+}
+int main()
 {
-    if(T)
-    {
-        if(T->pLeft==NULL&&T->pRight==NULL)
-            return 1;
-        else
-        {
-            return CountLeaf(T->pLeft)+CountLeaf(T->pRight);
-        }
-    }
+    TREE T;
+    T = NULL;
+    CreateTree(T);
+    cout<<findLongestPathLength(T);
     return 0;
+
 }
-int main() {
-	TREE T; //hay: TNODE* T;
-	T = NULL; // Khoi tao cay T rong, or: CreateEmptyTree(T)
-	CreateTree(T);
-
-	cout << CountLeaf(T);
-	return 0;
-}
-
-
